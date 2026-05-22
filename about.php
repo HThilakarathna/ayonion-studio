@@ -66,7 +66,7 @@ include 'includes/navbar.php';
                     <div
                         class="absolute -right-8 -bottom-8 z-20 p-8 rounded-3xl bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl hidden md:block">
                         <div class="text-4xl font-black text-white">100%</div>
-                        <div class="text-xs font-bold text-brand-secondary uppercase tracking-widest">Quality Driven
+                        <div class="text-xs font-bold text-brand-secondary uppercase tracking-widest">Data-Driven
                         </div>
                     </div>
                 </div>

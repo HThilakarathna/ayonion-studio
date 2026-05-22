@@ -39,7 +39,7 @@
             <div
                 class="relative aspect-video rounded-[4rem] overflow-hidden border border-brand-accent/50 shadow-2xl bg-brand-darkest">
                 <!-- Video Source -->
-                <video muted loop playsinline preload="none"
+                <video muted loop playsinline preload="metadata"
                     class="h-full w-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-700 lazy-video-hero">
                     <source
                         data-src="https://assets.mixkit.co/videos/preview/mixkit-digital-animation-of-a-world-map-1055-large.mp4"
@@ -130,7 +130,7 @@
                         lazyVideoObserver.unobserve(target);
                     }
                 });
-            }, { rootMargin: "0px 0px 300px 0px" });
+            }, { rootMargin: "0px 0px 1500px 0px" });
 
             lazyHeroVideos.forEach((lazyVideo) => {
                 lazyVideoObserver.observe(lazyVideo);

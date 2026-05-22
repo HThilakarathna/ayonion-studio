@@ -37,7 +37,7 @@
                 <!-- Video Container -->
                 <div class="relative aspect-video bg-brand-darkest overflow-hidden">
                     <video class="h-full w-full object-cover opacity-90 group-hover:opacity-100 transition-opacity duration-500 lazy-video-ads"
-                        playsinline preload="none">
+                        playsinline preload="metadata">
                         <source data-src="assets/vedios/1.mp4" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
@@ -155,7 +155,7 @@
                         lazyVideoObserver.unobserve(target);
                     }
                 });
-            }, { rootMargin: "0px 0px 300px 0px" });
+            }, { rootMargin: "0px 0px 1500px 0px" });
 
             lazyAdVideos.forEach((lazyVideo) => {
                 lazyVideoObserver.observe(lazyVideo);

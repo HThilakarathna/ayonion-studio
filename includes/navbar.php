@@ -25,7 +25,7 @@
             <!-- Desktop CTA -->
             <div class="hidden lg:flex items-center">
                 <a href="index.php#contact"
-                    class="inline-flex items-center justify-center rounded-full bg-[#102a43] hover:bg-[#2E6083] px-8 py-2.5 text-[0.95rem] font-black text-white shadow-lg transition-all duration-300 hover:-translate-y-0.5">
+                    class="inline-flex items-center justify-center rounded-full bg-brand-darkest hover:bg-brand-deep px-8 py-2.5 text-[0.95rem] font-black text-white shadow-lg transition-all duration-300 hover:-translate-y-0.5">
                     Let's Talk
                 </a>
             </div>
@@ -68,7 +68,7 @@
 
             <div class="p-6 border-t border-slate-100 bg-white">
                 <a @click="mobileMenu = false" href="index.php#contact"
-                    class="flex w-full items-center justify-center gap-2 rounded-full bg-[#102a43] hover:bg-[#2E6083] py-3.5 text-[0.95rem] font-black text-white shadow-lg transition-all duration-300">
+                    class="flex w-full items-center justify-center gap-2 rounded-full bg-brand-darkest hover:bg-brand-deep py-3.5 text-[0.95rem] font-black text-white shadow-lg transition-all duration-300">
                     Let's Talk
                 </a>
             </div>

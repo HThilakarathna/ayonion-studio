@@ -24,11 +24,11 @@
             <div class="flex flex-col items-center lg:items-end gap-6">
                 <p class="text-brand-tertiary font-black uppercase tracking-[0.4em] text-[10px]">Join our elite client
                     list</p>
-                <a href="#contact"
-                    class="px-14 py-7 rounded-2xl bg-brand-highlight text-brand-darkest font-black uppercase tracking-[0.2em] text-xs hover:scale-105 transition-all shadow-2xl shadow-brand-highlight/20 group flex items-center gap-4">
-                    <span>Let's Build It</span>
-                    <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
-                </a>
+                <a href="index.php#contact"
+                class="px-14 py-7 rounded-2xl bg-brand-highlight text-brand-darkest font-black uppercase tracking-[0.2em] text-xs hover:scale-105 transition-all shadow-2xl shadow-brand-highlight/20 group flex items-center gap-4">
+                <span>Let's Build Your Brand</span>
+                <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+            </a>
             </div>
         </div>
 

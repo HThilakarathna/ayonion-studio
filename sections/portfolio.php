@@ -124,7 +124,7 @@
                             style="clip-path: inset(0 round 3rem); -webkit-clip-path: inset(0 round 3rem);">
                             <video
                                 class="w-full h-full object-cover opacity-85 group-hover:scale-105 transition-transform duration-[1.2s] ease-out lazy-video"
-                                loop muted playsinline preload="none"
+                                loop muted playsinline preload="metadata"
                                 data-src="<?php echo $ad['video']; ?>"></video>
                         </div>
 
@@ -206,7 +206,7 @@
                         lazyVideoObserver.unobserve(target);
                     }
                 });
-            }, { rootMargin: "0px 0px 300px 0px" });
+            }, { rootMargin: "0px 0px 1500px 0px" });
 
             lazyVideos.forEach((lazyVideo) => {
                 lazyVideoObserver.observe(lazyVideo);

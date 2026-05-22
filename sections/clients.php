@@ -8,13 +8,13 @@
         <div data-aos="fade-down"
             class="animate-float inline-flex items-center gap-2.5 px-6 py-2.5 rounded-full bg-slate-50 border border-slate-100 mb-8 shadow-sm">
             <span class="flex h-2 w-2 rounded-full bg-brand-tertiary animate-pulse"></span>
-            <span class="text-[10px] md:text-xs font-black uppercase tracking-[0.4em] text-brand-tertiary">Global
-                Partners</span>
+            <span class="text-[10px] md:text-xs font-black uppercase tracking-[0.4em] text-brand-tertiary">Trusted by Leading
+                Brands</span>
         </div>
 
         <h3 data-aos="fade-up"
             class="text-4xl md:text-5xl lg:text-6xl font-black text-brand-darkest tracking-tight max-w-4xl leading-[1.1] font-display">
-            Trusted by Leading Brands <br> <span class="text-brand-tertiary">Our Collaborative Journey to Digital Excellence</span>
+            Our Collaborative Journey to <br> <span class="text-brand-tertiary">Digital Excellence</span>
         </h3>
     </div>
 
