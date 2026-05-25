@@ -1,3 +1,9 @@
+<?php
+/**
+ * Ayonion Studios - Email Mailer
+ * Handles email sending via cPanel SMTP using PHPMailer
+ */
+
 // Check if PHPMailer exists before requiring
 $phpmailer_path = dirname(__DIR__) . '/vendor/phpmailer/phpmailer/src/';
 if (file_exists($phpmailer_path . 'PHPMailer.php')) {
