@@ -116,11 +116,11 @@ function sendAyonionEmail($to, $subject, $body, $plainText = '') {
         return sendAyonionFallbackMail($to, $subject, $plainText ?: $body, $fromEmail, $fromName);
     }
 
-    $mail = new PHPMailer\PHPMailer\PHPMailer(true);
+    $sendViaSmtp = function ($host) use ($smtpUser, $smtpPass, $smtpSecure, $smtpPort, $fromEmail, $fromName, $to, $subject, $body, $plainText) {
+        $mail = new PHPMailer\PHPMailer\PHPMailer(true);
 
-    try {
         $mail->isSMTP();
-        $mail->Host       = $smtpHost;
+        $mail->Host       = $host;
         $mail->SMTPAuth   = true;
         $mail->Username   = $smtpUser;
         $mail->Password   = $smtpPass;
@@ -138,8 +138,16 @@ function sendAyonionEmail($to, $subject, $body, $plainText = '') {
         $mail->AltBody = $plainText ?: strip_tags($body);
 
         return $mail->send();
+    };
+
+    try {
+        return $sendViaSmtp($smtpHost);
     } catch (\Throwable $e) {
-        logAyonionMailerError('SMTP send failed, attempting fallback mail()', [
+        $serverHost = $_SERVER['HTTP_HOST'] ?? '';
+        $domainHost = preg_replace('/:\\d+$/', '', $serverHost);
+        $cpanelHost = !empty($domainHost) ? 'mail.' . $domainHost : '';
+
+        logAyonionMailerError('SMTP send failed on primary host', [
             'to' => $to,
             'subject' => $subject,
             'smtp_host' => $smtpHost,
@@ -147,6 +155,25 @@ function sendAyonionEmail($to, $subject, $body, $plainText = '') {
             'smtp_secure' => $smtpSecure,
             'error' => $e->getMessage()
         ]);
+
+        if (!empty($cpanelHost) && strtolower($cpanelHost) !== strtolower($smtpHost)) {
+            try {
+                logAyonionMailerError('Retrying SMTP with cPanel host', [
+                    'to' => $to,
+                    'subject' => $subject,
+                    'retry_host' => $cpanelHost
+                ]);
+                return $sendViaSmtp($cpanelHost);
+            } catch (\Throwable $retryError) {
+                logAyonionMailerError('SMTP retry failed on cPanel host, attempting fallback mail()', [
+                    'to' => $to,
+                    'subject' => $subject,
+                    'retry_host' => $cpanelHost,
+                    'error' => $retryError->getMessage()
+                ]);
+            }
+        }
+
         return sendAyonionFallbackMail($to, $subject, $plainText ?: $body, $fromEmail, $fromName);
     }
 }

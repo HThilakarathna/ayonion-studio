@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $error = "Please fill in all required fields correctly.";
     } else {
         // Get recipient from env or use default
-        $recipient = getenv('INQUIRY_RECIPIENT') ?: "info@ayonionstudios.com";
+        $recipient = getenv('INQUIRY_RECIPIENT') ?: (getenv('RECEIVER_EMAIL') ?: "info@ayonionstudios.com");
         $subject = "New Inquiry from $name - Ayonion Studios";
 
         // Build professional HTML email content
