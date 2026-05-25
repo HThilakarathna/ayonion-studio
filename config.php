@@ -4,12 +4,17 @@
  * Ayonion Studios - Configuration & Form Handler
  */
 
+// Load environment variables and mailer
+require_once __DIR__ . '/includes/env_loader.php';
+require_once __DIR__ . '/includes/mailer.php';
+
 // Turn off error reporting for a "clean" UI once fixed
 error_reporting(0);
 
 // Contact Form Logic
 $message_sent = false;
 $error = '';
+$sent_content = '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = isset($_POST['name']) ? strip_tags(trim($_POST['name'])) : "Guest";
@@ -21,23 +26,50 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty($name) || empty($message) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $error = "Please fill in all required fields correctly.";
     } else {
-        // Set your email address here
-        $recipient = "info@ayonionstudios.com";
-        $subject = "Ayonion Studios - New Inquiry from $name";
+        // Get recipient from env or use default
+        $recipient = getenv('INQUIRY_RECIPIENT') ?: "info@ayonionstudios.com";
+        $subject = "New Inquiry from $name - Ayonion Studios";
 
-        $email_content = "New message from your website:\n\n";
-        $email_content .= "Name: $name\n";
-        $email_content .= "Email: $email\n";
-        $email_content .= "Phone: $phone\n";
-        $email_content .= "Service: $service\n\n";
-        $email_content .= "Message:\n$message\n";
+        // Build professional HTML email content
+        $email_content = "<html><body style='font-family: Arial, sans-serif; line-height: 1.6; color: #333;'>";
+        $email_content .= "<div style='max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px;'>";
+        $email_content .= "<h2 style='color: #1a1a1a; border-bottom: 3px solid #F7C935; padding-bottom: 10px;'>New Website Inquiry</h2>";
+        
+        $email_content .= "<div style='background: #f9f9f9; padding: 15px; border-radius: 5px; margin: 15px 0;'>";
+        $email_content .= "<p><strong>Name:</strong> " . htmlspecialchars($name) . "</p>";
+        $email_content .= "<p><strong>Email:</strong> <a href='mailto:" . htmlspecialchars($email) . "'>" . htmlspecialchars($email) . "</a></p>";
+        $email_content .= "<p><strong>Phone:</strong> " . htmlspecialchars($phone) . "</p>";
+        $email_content .= "<p><strong>Service Interest:</strong> " . htmlspecialchars($service) . "</p>";
+        $email_content .= "</div>";
+        
+        $email_content .= "<h3 style='color: #1a1a1a;'>Message:</h3>";
+        $email_content .= "<p style='background: #f0f0f0; padding: 15px; border-left: 4px solid #F7C935; border-radius: 3px;'>" . nl2br(htmlspecialchars($message)) . "</p>";
+        
+        $email_content .= "<hr style='border: none; border-top: 1px solid #ddd; margin: 20px 0;'>";
+        $email_content .= "<p style='font-size: 12px; color: #666;'><em>Received: " . date('Y-m-d H:i:s') . "</em></p>";
+        $email_content .= "</div></body></html>";
 
-        $email_headers = "From: webmaster@ayonion.com";
+        // Plain text version for email clients that don't support HTML
+        $plain_text = "New Website Inquiry\n\n";
+        $plain_text .= "Name: $name\n";
+        $plain_text .= "Email: $email\n";
+        $plain_text .= "Phone: $phone\n";
+        $plain_text .= "Service Interest: $service\n\n";
+        $plain_text .= "Message:\n$message\n\n";
+        $plain_text .= "---\n";
+        $plain_text .= "Received: " . date('Y-m-d H:i:s');
 
-        if (@mail($recipient, $subject, $email_content, $email_headers)) {
+        // Store for debug display
+        $sent_content = htmlspecialchars($plain_text);
+
+        // Send email using mailer function
+        if (sendAyonionEmail($recipient, $subject, $email_content, $plain_text)) {
             $message_sent = true;
+            
+            // Log successful inquiry (optional: send confirmation to customer)
+            // sendAyonionEmail($email, "We received your inquiry - Ayonion Studios", "Thank you for reaching out! We'll get back to you soon.");
         } else {
-            $error = "Oops! Something went wrong and we couldn't send your message.";
+            $error = "Oops! Something went wrong and we couldn't send your message. Please try again later.";
         }
     }
 }

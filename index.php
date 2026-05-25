@@ -15,6 +15,9 @@ $message_sent = false;
 $error = '';
 $sent_content = '';
 
+// Load mailer helper (uses PHPMailer when available)
+require_once __DIR__ . '/includes/mailer.php';
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $recipient = "info@ayonionstudios.com";
 
@@ -41,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $sent_content = $email_content;
 
-        if (@mail($recipient, $subject, $email_content) || $_SERVER['REMOTE_ADDR'] == '127.0.0.1' || $_SERVER['REMOTE_ADDR'] == '::1') {
+        if (sendAyonionEmail($recipient, $subject, $email_content, strip_tags($email_content))) {
             $message_sent = true;
         } else {
             $error = "Oops! We encountered an error while sending. Please try again or contact us directly.";
