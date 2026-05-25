@@ -15,45 +15,67 @@ if (file_exists($phpmailer_path . 'PHPMailer.php')) {
     $has_phpmailer = false;
 }
 
-require_once 'env_loader.php';
+require_once __DIR__ . '/env_loader.php';
+
+function sendAyonionFallbackMail($to, $subject, $body, $fromEmail, $fromName, $replyTo = '') {
+    $plainBody = strip_tags($body);
+    $headers = [];
+    $headers[] = 'MIME-Version: 1.0';
+    $headers[] = 'Content-Type: text/plain; charset=UTF-8';
+    $headers[] = 'From: ' . $fromName . ' <' . $fromEmail . '>';
+
+    if (!empty($replyTo) && filter_var($replyTo, FILTER_VALIDATE_EMAIL)) {
+        $headers[] = 'Reply-To: ' . $replyTo;
+    }
+
+    return @mail($to, $subject, $plainBody, implode("\r\n", $headers));
+}
 
 function sendAyonionEmail($to, $subject, $body, $plainText = '') {
     global $has_phpmailer;
 
+    $smtpHost = getenv('SMTP_HOST') ?: '';
+    $smtpUser = getenv('SMTP_USER') ?: '';
+    $smtpPass = getenv('SMTP_PASS') ?: '';
+    $smtpPort = (int) (getenv('SMTP_PORT') ?: 587);
+    $smtpSecure = getenv('SMTP_SECURE') ?: 'tls';
+    $fromName = getenv('FROM_NAME') ?: 'Ayonion Studios';
+
+    $serverHost = $_SERVER['HTTP_HOST'] ?? 'localhost';
+    $defaultFrom = 'noreply@' . preg_replace('/:\\d+$/', '', $serverHost);
+    $fromEmail = filter_var($smtpUser, FILTER_VALIDATE_EMAIL) ? $smtpUser : $defaultFrom;
+
     if (!$has_phpmailer) {
-        // Fallback to mail() if PHPMailer is missing
-        return @mail($to, $subject, strip_tags($body));
+        return sendAyonionFallbackMail($to, $subject, $plainText ?: $body, $fromEmail, $fromName);
+    }
+
+    if (empty($smtpHost) || empty($smtpUser) || empty($smtpPass)) {
+        return sendAyonionFallbackMail($to, $subject, $plainText ?: $body, $fromEmail, $fromName);
     }
 
     $mail = new PHPMailer\PHPMailer\PHPMailer(true);
 
     try {
-        // Server settings
         $mail->isSMTP();
-        $mail->Host       = getenv('SMTP_HOST') ?: 'smtp.gmail.com';
+        $mail->Host       = $smtpHost;
         $mail->SMTPAuth   = true;
-        $mail->Username   = getenv('SMTP_USER');
-        $mail->Password   = getenv('SMTP_PASS');
-        $mail->SMTPSecure = getenv('SMTP_SECURE') ?: 'tls';
-        $mail->Port       = getenv('SMTP_PORT') ?: 587;
+        $mail->Username   = $smtpUser;
+        $mail->Password   = $smtpPass;
+        $mail->SMTPSecure = $smtpSecure;
+        $mail->Port       = $smtpPort;
+        $mail->CharSet    = 'UTF-8';
 
-        // Recipients
-        $mail->setFrom(getenv('SMTP_USER'), getenv('FROM_NAME') ?: 'Ayonion Studios');
+        $mail->setFrom($fromEmail, $fromName);
         $mail->addAddress($to);
-        $mail->addReplyTo(getenv('SMTP_USER'), getenv('FROM_NAME'));
+        $mail->addReplyTo($fromEmail, $fromName);
 
-        // Content
         $mail->isHTML(true);
         $mail->Subject = $subject;
-        $mail->Body    = nl2br($body);
+        $mail->Body    = $body;
         $mail->AltBody = $plainText ?: strip_tags($body);
 
         return $mail->send();
-    } catch (Exception $e) {
-        // Fallback to mail() for localhost testing if SMTP fails
-        if ($_SERVER['REMOTE_ADDR'] == '127.0.0.1' || $_SERVER['REMOTE_ADDR'] == '::1') {
-            return @mail($to, $subject, $body);
-        }
-        return false;
+    } catch (\Throwable $e) {
+        return sendAyonionFallbackMail($to, $subject, $plainText ?: $body, $fromEmail, $fromName);
     }
 }

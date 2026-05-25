@@ -19,7 +19,7 @@ $sent_content = '';
 require_once __DIR__ . '/includes/mailer.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $recipient = "info@ayonionstudios.com";
+    $recipient = getenv('INQUIRY_RECIPIENT') ?: "info@ayonionstudios.com";
 
     $name = isset($_POST["name"]) ? strip_tags(trim($_POST["name"])) : "Guest";
     $email = isset($_POST["email"]) ? filter_var(trim($_POST["email"]), FILTER_SANITIZE_EMAIL) : "No Email";
