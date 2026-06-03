@@ -19,35 +19,42 @@ $sent_content = '';
 require_once __DIR__ . '/includes/mailer.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $recipient = getenv('INQUIRY_RECIPIENT') ?: (getenv('RECEIVER_EMAIL') ?: "info@ayonionstudios.com");
-
-    $name = isset($_POST["name"]) ? strip_tags(trim($_POST["name"])) : "Guest";
-    $email = isset($_POST["email"]) ? filter_var(trim($_POST["email"]), FILTER_SANITIZE_EMAIL) : "No Email";
-    $phone = isset($_POST["phone"]) ? strip_tags(trim($_POST["phone"])) : "Not Provided";
-    $service = isset($_POST["service"]) ? strip_tags(trim($_POST["service"])) : "Not specified";
-    $message = isset($_POST["message"]) ? strip_tags(trim($_POST["message"])) : "";
-
-    if (empty($name) || empty($message) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $error = "Please fill in all required fields correctly.";
+    // Honeypot check for bot spam
+    if (!empty($_POST['website_url'])) {
+        $message_sent = true;
+        // Log the blocked spam attempt so we know it's working
+        file_put_contents(__DIR__ . '/spam_log.txt', date("Y-m-d H:i:s") . " - Blocked bot submission on contact form from IP: " . $_SERVER['REMOTE_ADDR'] . "\n", FILE_APPEND);
     } else {
-        $subject = "🚀 New Lead: $name - Ayonion Studios";
+        $recipient = getenv('INQUIRY_RECIPIENT') ?: (getenv('RECEIVER_EMAIL') ?: "info@ayonionstudios.com");
 
-        $email_content = "🚀 New Lead from Ayonion Studios\n";
-        $email_content .= "=================================\n\n";
-        $email_content .= "👤 Name: $name\n";
-        $email_content .= "📧 Email: $email\n";
-        $email_content .= "📞 Phone: $phone\n";
-        $email_content .= "💼 Interested In: $service\n\n";
-        $email_content .= "📝 Message:\n$message\n\n";
-        $email_content .= "=================================\n";
-        $email_content .= "📅 Sent on: " . date("Y-m-d H:i:s");
+        $name = isset($_POST["name"]) ? strip_tags(trim($_POST["name"])) : "Guest";
+        $email = isset($_POST["email"]) ? filter_var(trim($_POST["email"]), FILTER_SANITIZE_EMAIL) : "No Email";
+        $phone = isset($_POST["phone"]) ? strip_tags(trim($_POST["phone"])) : "Not Provided";
+        $service = isset($_POST["service"]) ? strip_tags(trim($_POST["service"])) : "Not specified";
+        $message = isset($_POST["message"]) ? strip_tags(trim($_POST["message"])) : "";
 
-        $sent_content = $email_content;
-
-        if (sendAyonionEmail($recipient, $subject, $email_content, strip_tags($email_content))) {
-            $message_sent = true;
+        if (empty($name) || empty($message) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $error = "Please fill in all required fields correctly.";
         } else {
-            $error = "Oops! We encountered an error while sending. Please try again or contact us directly.";
+            $subject = "🚀 New Lead: $name - Ayonion Studios";
+
+            $email_content = "🚀 New Lead from Ayonion Studios\n";
+            $email_content .= "=================================\n\n";
+            $email_content .= "👤 Name: $name\n";
+            $email_content .= "📧 Email: $email\n";
+            $email_content .= "📞 Phone: $phone\n";
+            $email_content .= "💼 Interested In: $service\n\n";
+            $email_content .= "📝 Message:\n$message\n\n";
+            $email_content .= "=================================\n";
+            $email_content .= "📅 Sent on: " . date("Y-m-d H:i:s");
+
+            $sent_content = $email_content;
+
+            if (sendAyonionEmail($recipient, $subject, $email_content, strip_tags($email_content))) {
+                $message_sent = true;
+            } else {
+                $error = "Oops! We encountered an error while sending. Please try again or contact us directly.";
+            }
         }
     }
 }
