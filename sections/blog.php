@@ -32,6 +32,42 @@
                     'date' => 'May 18, 2026',
                     'image' => 'image/blog3.jpg',
                     'short_desc' => 'Massive Video Removal, No TikTok Shop Yet, and Global Ban Worries. Here is what you need to know about TikTok in Sri Lanka.'
+                ],
+                'digital-marketing-strategy' => [
+                    'title' => 'How to Build a Strong Digital Marketing Strategy',
+                    'date' => 'June 4, 2026',
+                    'image' => 'image/blog/blog4-thumbnail.png',
+                    'short_desc' => 'A strong digital marketing strategy helps businesses grow faster, attract more customers, and increase sales online. Learn the 6 key steps every business must take.'
+                ],
+                'why-digital-marketing-2026' => [
+                    'title' => 'Why Digital Marketing is Important for Businesses in 2026',
+                    'date' => 'June 4, 2026',
+                    'image' => 'image/blog/blog5-thumbnail.jpg',
+                    'short_desc' => 'Digital marketing has become one of the most effective ways to reach customers, increase brand awareness, and generate sales. Discover why it matters more than ever in 2026.'
+                ],
+                'facebook-organic-growth-2026' => [
+                    'title' => 'How to Organically Grow a Facebook Page in 2026',
+                    'date' => 'June 4, 2026',
+                    'image' => 'image/blog/blog7c.png',
+                    'short_desc' => 'Growing a Facebook Page organically means building real followers, reach, and engagement without paid ads. Learn the 7 proven strategies to grow your page naturally in 2026.'
+                ],
+                'ai-digital-marketing' => [
+                    'title' => 'How is AI changing digital marketing?',
+                    'date' => 'June 4, 2026',
+                    'image' => 'image/blog/blog8.png',
+                    'short_desc' => 'Artificial Intelligence (AI) has become one of the most powerful technologies transforming the digital marketing industry. Discover how AI is reshaping marketing strategies.'
+                ],
+                'facebook-algorithm-2026' => [
+                    'title' => 'How the Facebook Algorithm Works in 2026',
+                    'date' => 'June 4, 2026',
+                    'image' => 'image/blog/blog10.jpeg',
+                    'short_desc' => 'The Facebook algorithm in 2026 is an advanced AI-powered ranking system developed by Meta. Learn how it works and how to increase your organic reach.'
+                ],
+                'hashtag-best-practices' => [
+                    'title' => 'Best Practices for Using Hashtags in Social Media Marketing',
+                    'date' => 'June 4, 2026',
+                    'image' => 'image/blog/blog11.jpeg',
+                    'short_desc' => 'Hashtags are still an important part of social media marketing, but they are no longer a magic solution. Learn the best practices for 2026.'
                 ]
             ];
             foreach ($posts as $id => $p): ?>

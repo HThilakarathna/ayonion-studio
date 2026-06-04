@@ -16,7 +16,7 @@
                 { id: 8, name: 'Competitor Audit', credits: 5 },
                 { id: 9, name: 'Complete Research', credits: 10 },
                 { id: 10, name: 'Recording Day (Up to 4 hours)', credits: 8 },
-                { id: 11, name: 'Logo Creation', credits: 5 },
+                { id: 11, name: 'Logo Creation', credits: 3 },
                 { id: 12, name: 'Influencer / Model Research', credits: 3 },
                 { id: 13, name: 'Article Writing', credits: 2 },
                 { id: 14, name: 'Blog Post', credits: 1 },
