@@ -7,6 +7,7 @@
 // Load environment variables and mailer
 require_once __DIR__ . '/includes/env_loader.php';
 require_once __DIR__ . '/includes/mailer.php';
+require_once __DIR__ . '/includes/spam_guard.php';
 
 // Turn off error reporting for a "clean" UI once fixed
 error_reporting(0);
@@ -17,6 +18,9 @@ $error = '';
 $sent_content = '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (spamGuardIsBlocked('contact')) {
+        $message_sent = true;
+    } else {
     $name = isset($_POST['name']) ? strip_tags(trim($_POST['name'])) : "Guest";
     $email = isset($_POST['email']) ? filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL) : "No Email";
     $phone = isset($_POST['phone']) ? strip_tags(trim($_POST['phone'])) : "Not Provided";
@@ -71,6 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {
             $error = "Oops! Something went wrong and we couldn't send your message. Please try again later.";
         }
+    }
     }
 }
 

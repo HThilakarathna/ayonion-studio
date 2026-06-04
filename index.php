@@ -17,13 +17,13 @@ $sent_content = '';
 
 // Load mailer helper (uses PHPMailer when available)
 require_once __DIR__ . '/includes/mailer.php';
+require_once __DIR__ . '/includes/spam_guard.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Honeypot check for bot spam
-    if (!empty($_POST['website_url'])) {
+    $formId = (isset($_POST['type']) && $_POST['type'] === 'plan_checkout') ? 'plan_checkout' : 'contact';
+
+    if (spamGuardIsBlocked($formId)) {
         $message_sent = true;
-        // Log the blocked spam attempt so we know it's working
-        file_put_contents(__DIR__ . '/spam_log.txt', date("Y-m-d H:i:s") . " - Blocked bot submission on contact form from IP: " . $_SERVER['REMOTE_ADDR'] . "\n", FILE_APPEND);
     } else {
         $recipient = getenv('INQUIRY_RECIPIENT') ?: (getenv('RECEIVER_EMAIL') ?: "info@ayonionstudios.com");
 

@@ -195,10 +195,11 @@
 
                     <!-- Form for Mailing functionality -->
                     <form action="#deliverable-planner" method="POST" class="space-y-6">
-                        <!-- Honeypot field for spam bots -->
-                        <div style="display:none;" aria-hidden="true">
-                            <input type="text" name="website_url" id="website_url" tabindex="-1" autocomplete="off">
-                        </div>
+                        <?php
+                        require_once dirname(__DIR__) . '/includes/spam_guard.php';
+                        spamGuardRenderStyles();
+                        spamGuardRenderFields('plan_checkout');
+                        ?>
                         <input type="hidden" name="type" value="plan_checkout">
                         <input type="hidden" name="plan_credits" :value="planCredits">
                         <input type="hidden" name="total_used" :value="totalUsed">
@@ -261,3 +262,8 @@
         background: #618698;
     }
 </style>
+<?php
+if (function_exists('spamGuardRenderScript')) {
+    spamGuardRenderScript();
+}
+?>
