@@ -109,10 +109,11 @@
                         </div>
                     <?php endif; ?>
                     <form action="#contact" method="POST" class="space-y-10 relative z-10">
-                        <!-- Honeypot field for spam bots -->
-                        <div style="display:none;" aria-hidden="true">
-                            <input type="text" name="website_url" id="website_url" tabindex="-1" autocomplete="off">
-                        </div>
+                        <?php
+                        require_once dirname(__DIR__) . '/includes/spam_guard.php';
+                        spamGuardRenderStyles();
+                        spamGuardRenderFields('contact');
+                        ?>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
                             <div class="space-y-4">
                                 <label class="block text-[0.7rem] font-black uppercase tracking-[0.2em] text-slate-400">Your
@@ -167,3 +168,8 @@
         </div>
     </div>
 </section>
+<?php
+if (function_exists('spamGuardRenderScript')) {
+    spamGuardRenderScript();
+}
+?>

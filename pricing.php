@@ -13,12 +13,11 @@ $message_sent = false;
 $error = '';
 $sent_content = '';
 
+require_once __DIR__ . '/includes/spam_guard.php';
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Honeypot check for bot spam
-    if (!empty($_POST['website_url'])) {
+    if (spamGuardIsBlocked('plan_checkout')) {
         $message_sent = true;
-        // Log the blocked spam attempt so we know it's working
-        file_put_contents(__DIR__ . '/spam_log.txt', date("Y-m-d H:i:s") . " - Blocked bot submission on planner form from IP: " . $_SERVER['REMOTE_ADDR'] . "\n", FILE_APPEND);
     } else {
         $recipient = "info@ayonionstudios.com";
 
